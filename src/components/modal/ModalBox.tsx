@@ -59,7 +59,7 @@ export default function ModalBox({ showModal, setShowModal, children, title, des
                                             type="button"
                                             className="inline-flex justify-center rounded-md border border-transparent bg-zinc-700 px-4 py-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                             onClick={() => {
-                                                closeModal()
+                                                // closeModal()
                                                 onSubmit()
                                             }}
                                         >
