@@ -47,7 +47,8 @@ const Home = () => {
 
                 <div className="w-full flex flex-col gap-3">
                     {tasks && tasks?.map((item: any, index: any) => (
-                        <div className="w-full h-[80px] flex gap-3 bg-zinc-800 rounded-md p-3 cursor-pointer" key={index}>
+                        <div className="w-full h-[80px] flex gap-3 bg-zinc-800 rounded-md p-3 cursor-pointer" key={index}
+                            onClick={() => router.push(`/detail/${item?.slug}`)}>
                             <div className="h-full flex items-center">
                                 <div className="w-14 h-14 bg-zinc-700 rounded-md"></div>
                             </div>
