@@ -1,4 +1,5 @@
 "use client"
+import { deleteFromLocalStorage } from "@/utils/helper"
 import moment from "moment"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -7,14 +8,22 @@ const Home = () => {
     const router = useRouter()
 
     const [tasks, setTasks] = useState([]);
+    const [indicator, setIndicator] = useState<boolean>(false);
 
     useEffect(() => {
         const getTaskList = localStorage.getItem('tasks');
         setTasks(getTaskList ? JSON.parse(getTaskList) : [])
-    }, [])
+    }, [indicator])
 
     const handleAddTodo = () => {
         router.push('/create')
+    }
+
+    const handleDeleteTodo = (e: any, item: any) => {
+        e.preventDefault()
+        e.stopPropagation();
+        deleteFromLocalStorage(item)
+        setIndicator(!indicator)
     }
 
     return (
@@ -47,7 +56,7 @@ const Home = () => {
 
                 <div className="w-full flex flex-col gap-3">
                     {tasks && tasks?.map((item: any, index: any) => (
-                        <div className="w-full h-[80px] flex gap-3 bg-zinc-800 rounded-md p-3 cursor-pointer" key={index}
+                        <div className="w-full h-[80px] flex gap-3 bg-zinc-800 rounded-md p-3 cursor-pointer relative" key={index}
                             onClick={() => router.push(`/detail/${item?.slug}`)}>
                             <div className="h-full flex items-center">
                                 <div className="w-14 h-14 bg-zinc-700 rounded-md"></div>
@@ -64,6 +73,8 @@ const Home = () => {
                                     <p className='text-white/80 font-light'>{item?.description}</p>
                                 </div>
                             </div>
+
+                            <div className="absolute right-0 mx-3 z-20" onClick={(e: any) => handleDeleteTodo(e, item)}>😡</div>
                         </div>
                     ))}
                 </div>

@@ -2,7 +2,7 @@
 import Button from '@/components/button/Button'
 import InputText from '@/components/input/InputText'
 import ModalBox from '@/components/modal/ModalBox'
-import { addToLocalStorage, slugify } from '@/utils/helper'
+import { addToLocalStorage, editToLocalStorage, slugify } from '@/utils/helper'
 import moment from 'moment'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useState, useEffect } from 'react'
@@ -19,6 +19,8 @@ const DetailForm = ({ detailTask }: any) => {
         title: detailTask?.title,
         description: detailTask?.description,
         created_at: detailTask?.created_at,
+        taskId: '',
+        task: '',
     })
 
     const [taskList, setTaskList] = useState<any[]>(detailTask?.taskList)
@@ -27,71 +29,71 @@ const DetailForm = ({ detailTask }: any) => {
     console.log(taskList)
 
     const handleShowModal = () => {
-        // setShowModal(true)
-        // setForm({ ...form, task: '', taskId: '' })
+        setShowModal(true)
+        setForm({ ...form, task: '', taskId: '' })
     }
 
     const handleShowModalEdit = (e: any, item: any) => {
-        // e.preventDefault()
-        // setShowModalEdit(true);
-        // setForm({ ...form, task: item?.name, taskId: item?.id })
+        e.preventDefault()
+        setShowModalEdit(true);
+        setForm({ ...form, task: item?.name, taskId: item?.id })
     }
 
     const handleChangeInput = (e: any) => {
-        // const { name, value } = e.target
-        // if (name === 'title') {
-        //     setForm({ ...form, title: value })
-        // } else if (name === 'description') {
-        //     setForm({ ...form, description: value })
-        // } else if (name === 'task') {
-        //     setForm({ ...form, task: value })
-        // }
+        const { name, value } = e.target
+        if (name === 'title') {
+            setForm({ ...form, title: value })
+        } else if (name === 'description') {
+            setForm({ ...form, description: value })
+        } else if (name === 'task') {
+            setForm({ ...form, task: value })
+        }
     }
 
     const handleAddTask = (e: any) => {
-        // e?.preventDefault()
-        // if (form?.task !== '') {
-        //     setTaskList([...taskList, {
-        //         id: taskList.length + 1,
-        //         name: form?.task,
-        //         checked: false
-        //     }])
+        e?.preventDefault()
+        if (form?.task !== '') {
+            setTaskList([...taskList, {
+                id: taskList.length + 1,
+                name: form?.task,
+                checked: false
+            }])
 
-        //     setForm({ ...form, task: '' })
-        // }
-        // setShowModal(false)
+            setForm({ ...form, task: '' })
+        }
+        setShowModal(false)
     }
 
     const handleEditTask = (e: any) => {
-        // e?.preventDefault();
-        // if (form.task !== '') {
-        //     const updatedTaskList = taskList.map(task => {
-        //         if (task.id === form?.taskId) {
-        //             return {
-        //                 ...task,
-        //                 name: form.task
-        //             };
-        //         }
-        //         return task
-        //     });
-        //     setTaskList(updatedTaskList);
-        //     setForm({
-        //         ...form,
-        //         task: '',
-        //         taskId: ''
-        //     });
-        //     setShowModalEdit(false);
-        // }
+        e?.preventDefault();
+        if (form.task !== '') {
+            const updatedTaskList = taskList.map(task => {
+                if (task.id === form?.taskId) {
+                    return {
+                        ...task,
+                        name: form.task
+                    };
+                }
+                return task
+            });
+            setTaskList(updatedTaskList);
+            setForm({
+                ...form,
+                task: '',
+                taskId: ''
+            });
+            setShowModalEdit(false);
+        }
     }
 
     const handleRemoveTask = (e: any, taskId: any) => {
-        // e.preventDefault();
-        // const updatedTaskList = taskList.filter(task => task.id !== taskId);
-        // const reindexedTaskList = updatedTaskList.map((task, index) => ({
-        //     ...task,
-        //     id: index + 1
-        // }));
-        // setTaskList(reindexedTaskList);
+        e.preventDefault();
+        const updatedTaskList = taskList.filter(task => task.id !== taskId);
+        const reindexedTaskList = updatedTaskList.map((task, index) => ({
+            ...task,
+            id: index + 1
+        }));
+        setTaskList(reindexedTaskList);
     };
 
     const handleToggleCheckbox = (e: any, taskId: any) => {
@@ -109,22 +111,20 @@ const DetailForm = ({ detailTask }: any) => {
     }
 
     const handleSaveTask = (e: any) => {
-        // e.preventDefault()
-        // const currentDate = new Date();
-        // const formattedTask = {
-        //     id: 0,
-        //     slug: slugify(form?.title),
-        //     title: form?.title,
-        //     description: form?.description,
-        //     created_at: currentDate,
-        //     taskList
-        // }
-        // try {
-        //     addToLocalStorage(formattedTask)
-        //     router.push('/')
-        // } catch (error) {
-
-        // }
+        e.preventDefault()
+        const formattedTask = {
+            id: form?.id,
+            slug: slugify(form?.title),
+            title: form?.title,
+            description: form?.description,
+            created_at: form?.created_at,
+            taskList
+        }
+        try {
+            editToLocalStorage(formattedTask)
+            router.push('/')
+        } catch (error) {
+        }
     }
 
     return (
@@ -172,7 +172,7 @@ const DetailForm = ({ detailTask }: any) => {
 
                     <Button onClick={handleShowModal}>Add Task</Button>
                     {taskList.length ? (
-                        <Button type="submit">Save</Button>
+                        <Button type="submit">Save Changes</Button>
                     ) : <></>}
                 </div>
             </form>
@@ -191,7 +191,7 @@ const DetailForm = ({ detailTask }: any) => {
                         name="task"
                         className="bg-zinc-800"
                         onChange={handleChangeInput}
-                    // value={form?.task} 
+                        value={form?.task}
                     />
                 </form>
             </ModalBox>
@@ -210,7 +210,7 @@ const DetailForm = ({ detailTask }: any) => {
                         name="task"
                         className="bg-zinc-800"
                         onChange={handleChangeInput}
-                    // value={form?.task} 
+                        value={form?.task}
                     />
                 </form>
             </ModalBox>
