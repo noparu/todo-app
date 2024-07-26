@@ -1,4 +1,6 @@
 "use client"
+import ThreeDot from "@/components/icon/ThreeDot"
+import TrashIcon from "@/components/icon/TrashIcon"
 import { deleteFromLocalStorage } from "@/utils/helper"
 import moment from "moment"
 import { useRouter } from "next/navigation"
@@ -36,7 +38,7 @@ const Home = () => {
                 </div>
 
                 <div className="">
-                    <span>😶</span>
+                    <span><ThreeDot /></span>
                 </div>
             </div>
 
@@ -74,7 +76,7 @@ const Home = () => {
                                 </div>
                             </div>
 
-                            <div className="absolute right-0 mx-3 z-20" onClick={(e: any) => handleDeleteTodo(e, item)}>😡</div>
+                            <div className="absolute right-0 mx-3 z-20 text-red-600" onClick={(e: any) => handleDeleteTodo(e, item)}><TrashIcon /></div>
                         </div>
                     ))}
                 </div>

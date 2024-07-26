@@ -1,5 +1,7 @@
 "use client"
 import Button from '@/components/button/Button'
+import CrossIcon from '@/components/icon/CrossIcon'
+import EditIcon from '@/components/icon/EditIcon'
 import InputText from '@/components/input/InputText'
 import ModalBox from '@/components/modal/ModalBox'
 import { addToLocalStorage, slugify } from '@/utils/helper'
@@ -157,9 +159,9 @@ const CreateForm = () => {
                                 <p className='peer-checked:line-through'>{item?.name}
                                 </p>
 
-                                <div className="absolute right-0 my-auto mx-4 z-10 flex items-center gap-4">
-                                    <div className="" onClick={(e: any) => handleShowModalEdit(e, item)}>🤑</div>
-                                    <div className="" onClick={(e: any) => handleRemoveTask(e, item?.id)}>😡</div>
+                                <div className="absolute right-0 my-auto mx-4 z-10 flex items-center gap-2">
+                                    <div className="text-green-600" onClick={(e: any) => handleShowModalEdit(e, item)}><EditIcon /></div>
+                                    <div className="text-red-600" onClick={(e: any) => handleRemoveTask(e, item?.id)}><CrossIcon /></div>
                                 </div>
                             </label>
                         ))}
