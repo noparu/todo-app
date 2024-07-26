@@ -9,7 +9,7 @@ import moment from 'moment'
 import { useParams, useRouter } from 'next/navigation'
 import React, { useState, useEffect } from 'react'
 
-const DetailForm = ({ detailTask }: any) => {
+const DetailForm = ({ detailTask, edit, setEdit }: any) => {
     const router = useRouter();
     const params = useParams()
     const [showModal, setShowModal] = useState<boolean>(false)
@@ -31,101 +31,117 @@ const DetailForm = ({ detailTask }: any) => {
     console.log(taskList)
 
     const handleShowModal = () => {
-        setShowModal(true)
-        setForm({ ...form, task: '', taskId: '' })
+        if (edit) {
+            setShowModal(true)
+            setForm({ ...form, task: '', taskId: '' })
+        }
     }
 
     const handleShowModalEdit = (e: any, item: any) => {
         e.preventDefault()
-        setShowModalEdit(true);
-        setForm({ ...form, task: item?.name, taskId: item?.id })
+        if (edit) {
+            setShowModalEdit(true);
+            setForm({ ...form, task: item?.name, taskId: item?.id })
+        }
     }
 
     const handleChangeInput = (e: any) => {
         const { name, value } = e.target
-        if (name === 'title') {
-            setForm({ ...form, title: value })
-        } else if (name === 'description') {
-            setForm({ ...form, description: value })
-        } else if (name === 'task') {
-            setForm({ ...form, task: value })
+        if (edit) {
+            if (name === 'title') {
+                setForm({ ...form, title: value })
+            } else if (name === 'description') {
+                setForm({ ...form, description: value })
+            } else if (name === 'task') {
+                setForm({ ...form, task: value })
+            }
         }
     }
 
     const handleAddTask = (e: any) => {
         e?.preventDefault()
-        if (form?.task !== '') {
-            setTaskList([...taskList, {
-                id: taskList.length + 1,
-                name: form?.task,
-                checked: false
-            }])
+        if (edit) {
+            if (form?.task !== '') {
+                setTaskList([...taskList, {
+                    id: taskList.length + 1,
+                    name: form?.task,
+                    checked: false
+                }])
 
-            setForm({ ...form, task: '' })
+                setForm({ ...form, task: '' })
+            }
+            setShowModal(false)
         }
-        setShowModal(false)
     }
 
     const handleEditTask = (e: any) => {
         e?.preventDefault();
-        if (form.task !== '') {
-            const updatedTaskList = taskList.map(task => {
-                if (task.id === form?.taskId) {
-                    return {
-                        ...task,
-                        name: form.task
-                    };
-                }
-                return task
-            });
-            setTaskList(updatedTaskList);
-            setForm({
-                ...form,
-                task: '',
-                taskId: ''
-            });
-            setShowModalEdit(false);
+        if (edit) {
+            if (form.task !== '') {
+                const updatedTaskList = taskList.map(task => {
+                    if (task.id === form?.taskId) {
+                        return {
+                            ...task,
+                            name: form.task
+                        };
+                    }
+                    return task
+                });
+                setTaskList(updatedTaskList);
+                setForm({
+                    ...form,
+                    task: '',
+                    taskId: ''
+                });
+                setShowModalEdit(false);
+            }
         }
     }
 
     const handleRemoveTask = (e: any, taskId: any) => {
         e.preventDefault();
-        const updatedTaskList = taskList.filter(task => task.id !== taskId);
-        const reindexedTaskList = updatedTaskList.map((task, index) => ({
-            ...task,
-            id: index + 1
-        }));
-        setTaskList(reindexedTaskList);
+        if (edit) {
+            const updatedTaskList = taskList.filter(task => task.id !== taskId);
+            const reindexedTaskList = updatedTaskList.map((task, index) => ({
+                ...task,
+                id: index + 1
+            }));
+            setTaskList(reindexedTaskList);
+        }
     };
 
     const handleToggleCheckbox = (e: any, taskId: any) => {
-        const updatedTaskList = taskList.map(task => {
-            if (task.id === taskId) {
-                return {
-                    ...task,
-                    checked: !task.checked
-                };
-            }
-            return task
-        });
+        if (edit) {
+            const updatedTaskList = taskList.map(task => {
+                if (task.id === taskId) {
+                    return {
+                        ...task,
+                        checked: !task.checked
+                    };
+                }
+                return task
+            });
 
-        setTaskList(updatedTaskList);
+            setTaskList(updatedTaskList);
+        }
     }
 
     const handleSaveTask = (e: any) => {
         e.preventDefault()
-        const formattedTask = {
-            id: form?.id,
-            slug: slugify(form?.title),
-            title: form?.title,
-            description: form?.description,
-            created_at: form?.created_at,
-            taskList
-        }
-        try {
-            editToLocalStorage(formattedTask)
-            router.push('/')
-        } catch (error) {
+        if (edit) {
+            const formattedTask = {
+                id: form?.id,
+                slug: slugify(form?.title),
+                title: form?.title,
+                description: form?.description,
+                created_at: form?.created_at,
+                taskList
+            }
+            try {
+                editToLocalStorage(formattedTask)
+                router.push('/')
+            } catch (error) {
+            }
         }
     }
 
@@ -159,21 +175,27 @@ const DetailForm = ({ detailTask }: any) => {
                     <div className="flex flex-col">
                         {taskList?.map((item: any, index: any) => (
                             <label htmlFor={`checkbox${index + 1}`} className='w-full hover:bg-zinc-800 cursor-pointer flex items-center gap-2 h-10 px-4 rounded-md relative' key={index}>
-                                <input type='checkbox' id={`checkbox${index + 1}`} className='accent-zinc-700 outline-none peer'
-                                    onChange={(e) => handleToggleCheckbox(e, item?.id)} checked={item?.checked} />
-                                <p className='peer-checked:line-through'>{item?.name}
+                                {edit && (
+                                    <input type='checkbox' id={`checkbox${index + 1}`} className='accent-zinc-700 outline-none peer'
+                                        onChange={(e) => handleToggleCheckbox(e, item?.id)} checked={item?.checked} />
+                                )}
+                                <p className={`peer-checked:line-through ${!edit && item?.checked && 'line-through'}`}>{item?.name}
                                 </p>
 
-                                <div className="absolute right-0 my-auto mx-4 z-10 flex items-center gap-2">
-                                    <div className="text-green-600" onClick={(e: any) => handleShowModalEdit(e, item)}><EditIcon /></div>
-                                    <div className="text-red-600" onClick={(e: any) => handleRemoveTask(e, item?.id)}><CrossIcon /></div>
-                                </div>
+                                {edit && (
+                                    <div className="absolute right-0 my-auto mx-4 z-10 flex items-center gap-2">
+                                        <div className="text-green-600" onClick={(e: any) => handleShowModalEdit(e, item)}><EditIcon /></div>
+                                        <div className="text-red-600" onClick={(e: any) => handleRemoveTask(e, item?.id)}><CrossIcon /></div>
+                                    </div>
+                                )}
                             </label>
                         ))}
                     </div>
 
-                    <Button onClick={handleShowModal}>Add Task</Button>
-                    {taskList.length ? (
+                    {edit && (
+                        <Button onClick={handleShowModal}>Add Task</Button>
+                    )}
+                    {edit && taskList.length ? (
                         <Button type="submit">Save Changes</Button>
                     ) : <></>}
                 </div>

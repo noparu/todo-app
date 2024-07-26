@@ -2,6 +2,7 @@
 import ThreeDot from "@/components/icon/ThreeDot"
 import TrashIcon from "@/components/icon/TrashIcon"
 import { deleteFromLocalStorage } from "@/utils/helper"
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react"
 import moment from "moment"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -11,6 +12,7 @@ const Home = () => {
 
     const [tasks, setTasks] = useState([]);
     const [indicator, setIndicator] = useState<boolean>(false);
+    const [edit, setEdit] = useState<boolean>(false)
 
     useEffect(() => {
         const getTaskList = localStorage.getItem('tasks');
@@ -37,9 +39,24 @@ const Home = () => {
                     <p className='text-xs block'>You have to work today</p>
                 </div>
 
-                <div className="">
-                    <span><ThreeDot /></span>
-                </div>
+                <Menu>
+                    <MenuButton className="">
+                        <ThreeDot />
+                    </MenuButton>
+
+                    <MenuItems
+                        transition
+                        anchor="bottom end"
+                        className="w-52 origin-top-right rounded-md border border-zinc-700 bg-zinc-800 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+                    >
+                        <MenuItem>
+                            <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-white/10"
+                                onClick={() => setEdit(true)}>
+                                Edit
+                            </button>
+                        </MenuItem>
+                    </MenuItems>
+                </Menu>
             </div>
 
             {/* category */}
@@ -76,7 +93,9 @@ const Home = () => {
                                 </div>
                             </div>
 
-                            <div className="absolute right-0 mx-3 z-20 text-red-600" onClick={(e: any) => handleDeleteTodo(e, item)}><TrashIcon /></div>
+                            {edit && (
+                                <div className="absolute right-0 mx-3 z-20 text-red-600" onClick={(e: any) => handleDeleteTodo(e, item)}><TrashIcon /></div>
+                            )}
                         </div>
                     ))}
                 </div>

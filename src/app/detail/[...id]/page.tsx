@@ -11,6 +11,7 @@ import ThreeDot from '@/components/icon/ThreeDot'
 const CreatePage = () => {
     const router = useRouter()
     const params = useParams()
+    const [edit, setEdit] = useState<boolean>(false)
     const [detailTask, setDetailTask] = useState(null)
 
     useEffect(() => {
@@ -44,17 +45,23 @@ const CreatePage = () => {
                         className="w-52 origin-top-right rounded-md border border-zinc-700 bg-zinc-800 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
                     >
                         <MenuItem>
+                            <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-white/10"
+                                onClick={() => setEdit(true)}>
+                                Edit
+                            </button>
+                        </MenuItem>
+                        <MenuItem>
                             <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-white/10" onClick={(e: any) => handleDeleteTodo(e, detailTask)}>
                                 Delete Task
                             </button>
                         </MenuItem>
-                        {/* <div className="cursor-pointer text-red-600" onClick={(e: any) => handleDeleteTodo(e, detailTask)}><TrashIcon /></div> */}
                     </MenuItems>
                 </Menu>
             </div>
             {detailTask && (
                 <DetailForm
                     detailTask={detailTask}
+                    edit={edit}
                 />
             )}
         </div>
