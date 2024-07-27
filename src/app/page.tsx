@@ -1,6 +1,7 @@
 "use client"
 import ThreeDot from "@/components/icon/ThreeDot"
 import TrashIcon from "@/components/icon/TrashIcon"
+import ModalBox from "@/components/modal/ModalBox"
 import { deleteFromLocalStorage } from "@/utils/helper"
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react"
 import moment from "moment"
@@ -13,6 +14,8 @@ const Home = () => {
     const [tasks, setTasks] = useState([]);
     const [indicator, setIndicator] = useState<boolean>(false);
     const [edit, setEdit] = useState<boolean>(false)
+    const [showModal, setShowModal] = useState<boolean>(false)
+    const [itemToDelete, setItemToDelete] = useState<any>(null);
 
     useEffect(() => {
         const getTaskList = localStorage.getItem('tasks');
@@ -24,10 +27,17 @@ const Home = () => {
     }
 
     const handleDeleteTodo = (e: any, item: any) => {
-        e.preventDefault()
-        e.stopPropagation();
-        deleteFromLocalStorage(item)
-        setIndicator(!indicator)
+        if (!showModal) {
+            e.preventDefault()
+            e.stopPropagation();
+            setShowModal(true)
+            setItemToDelete(item);
+        } else {
+            deleteFromLocalStorage(itemToDelete)
+            setIndicator(!indicator)
+            setItemToDelete(null)
+            setShowModal(false)
+        }
     }
 
     return (
@@ -105,6 +115,18 @@ const Home = () => {
             <div className="fixed right-0 bottom-0 z-10 m-4 cursor-pointer" onClick={handleAddTodo}>
                 <div className="w-12 h-12 bg-zinc-700 rounded-full flex items-center justify-center text-2xl text-white/70">+</div>
             </div>
+
+            {/* modal */}
+            <ModalBox
+                showModal={showModal}
+                setShowModal={setShowModal}
+                title="Delete Task"
+                description="Are you sure you want to delete this task? This action cannot be undone."
+                button="Delete"
+                onSubmit={handleDeleteTodo}
+            >
+
+            </ModalBox>
         </div>
     )
 }

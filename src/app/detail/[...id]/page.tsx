@@ -7,12 +7,15 @@ import TrashIcon from '@/components/icon/TrashIcon'
 import BackIcon from '@/components/icon/BackIcon'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import ThreeDot from '@/components/icon/ThreeDot'
+import ModalBox from '@/components/modal/ModalBox'
 
 const CreatePage = () => {
     const router = useRouter()
     const params = useParams()
     const [edit, setEdit] = useState<boolean>(false)
     const [detailTask, setDetailTask] = useState(null)
+    const [showModal, setShowModal] = useState<boolean>(false)
+    const [itemToDelete, setItemToDelete] = useState<any>(null);
 
     useEffect(() => {
         const getTask = localStorage.getItem('tasks')
@@ -22,10 +25,15 @@ const CreatePage = () => {
     }, [params])
 
     const handleDeleteTodo = (e: any, item: any) => {
-        e.preventDefault()
-        e.stopPropagation();
-        deleteFromLocalStorage(item)
-        router.push('/')
+        if (!showModal) {
+            // e.preventDefault()
+            // e.stopPropagation();
+            setShowModal(true)
+            setItemToDelete(item);
+        } else {
+            deleteFromLocalStorage(itemToDelete)
+            router.push('/')
+        }
     }
 
     return (
@@ -64,6 +72,18 @@ const CreatePage = () => {
                     edit={edit}
                 />
             )}
+
+            {/* modal */}
+            <ModalBox
+                showModal={showModal}
+                setShowModal={setShowModal}
+                title="Delete Task"
+                description="Are you sure you want to delete this task? This action cannot be undone."
+                button="Delete"
+                onSubmit={handleDeleteTodo}
+            >
+
+            </ModalBox>
         </div>
     )
 }
