@@ -46,8 +46,8 @@ const Home = () => {
             {/* header */}
             <div className="w-full flex items-center justify-between">
                 <div className="">
-                    <h1 className='text-sm font-medium'>Hello Jack,</h1>
-                    <p className='text-xs block'>You have to work today</p>
+                    <h1 className='text-sm font-medium'>Hi There 👋</h1>
+                    <p className='text-xs block'>Let's give our best today and make it a great day!</p>
                 </div>
 
                 <Menu>
@@ -61,31 +61,30 @@ const Home = () => {
                         className="w-52 origin-top-right rounded-md border border-neutral-700 bg-neutral-800 p-1 text-white text-sm/6 transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
                     >
                         <MenuItem>
-                            <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-neutral-700"
-                                onClick={() => setEdit(true)}>
-                                Edit
-                            </button>
+                            {tasks.length ? (
+                                <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-neutral-700"
+                                    onClick={() => setEdit(true)}>
+                                    Edit
+                                </button>
+                            ) : (
+                                <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-neutral-700"
+                                    onClick={() => router.push('/create')}>
+                                    Add Task
+                                </button>
+                            )}
                         </MenuItem>
                     </MenuItems>
                 </Menu>
             </div>
 
-            {/* category */}
-            <div className="w-full grid grid-cols-2 gap-3">
-                <div className="w-full h-[100px] bg-neutral-800 rounded-md"></div>
-                <div className="w-full h-[100px] bg-neutral-800 rounded-md"></div>
-                <div className="w-full h-[100px] bg-neutral-800 rounded-md"></div>
-                <div className="w-full h-[100px] bg-neutral-800 rounded-md"></div>
-            </div>
-
             {/* content */}
             <div className="flex flex-col gap-4">
                 <div className="">
-                    <h1 className='text-sm font-medium'>Today{`'`}s Task</h1>
+                    <h1 className='text-sm font-medium'>Your Tasks</h1>
                 </div>
 
                 <div className="w-full flex flex-col gap-3">
-                    {tasks && tasks?.map((item: any, index: any) => (
+                    {tasks.length ? tasks?.map((item: any, index: any) => (
                         <div className="w-full h-[80px] flex gap-3 bg-neutral-800 hover:bg-neutral-700 group rounded-md p-3 cursor-pointer relative transition" key={index}
                             onClick={() => router.push(`/detail/${item?.slug}`)}>
                             <div className="h-full flex items-center">
@@ -108,7 +107,9 @@ const Home = () => {
                                 <div className="absolute right-0 mx-3 z-10 text-red-500 group-hover:text-red-600 transition" onClick={(e: any) => handleDeleteTodo(e, item)}><CrossIcon /></div>
                             )}
                         </div>
-                    ))}
+                    )) : (
+                        <div className="text-sm text-white/40 text-center font-light">There are no tasks created</div>
+                    )}
                 </div>
             </div>
 
