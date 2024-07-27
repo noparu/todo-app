@@ -47,7 +47,7 @@ const Home = () => {
             <div className="w-full flex items-center justify-between">
                 <div className="">
                     <h1 className='text-sm font-medium'>Hi There 👋</h1>
-                    <p className='text-xs block'>Let's give our best today and make it a great day!</p>
+                    <p className='text-xs block'>Let{`'`}s give our best today and make it a great day!</p>
                 </div>
 
                 <Menu>
