@@ -1,5 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
+import Button from '../button/Button'
 
 export default function ModalBox({ showModal, setShowModal, children, title, description, button, onSubmit }: any) {
     function closeModal() {
@@ -37,7 +38,7 @@ export default function ModalBox({ showModal, setShowModal, children, title, des
                                 leaveFrom="opacity-100 scale-100"
                                 leaveTo="opacity-0 scale-95"
                             >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-zinc-800 p-6 text-left align-middle shadow-xl transition-all">
+                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-neutral-900 border-neutral-700 border p-6 text-left align-middle shadow-xl transition-all">
                                     <Dialog.Title
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-white"
@@ -54,17 +55,10 @@ export default function ModalBox({ showModal, setShowModal, children, title, des
                                         {children}
                                     </div>
 
-                                    <div className="mt-4">
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center rounded-md border border-transparent bg-zinc-700 px-4 py-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                            onClick={() => {
-                                                // closeModal()
-                                                onSubmit()
-                                            }}
-                                        >
+                                    <div className="mt-4 grid grid-cols-2">
+                                        <Button onClick={() => onSubmit()} className="text-white" width="w-fit" type="button">
                                             {button}
-                                        </button>
+                                        </Button>
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

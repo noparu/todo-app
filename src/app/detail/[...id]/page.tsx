@@ -37,7 +37,7 @@ const CreatePage = () => {
     }
 
     return (
-        <div className='p-4 flex flex-col gap-4 w-full bg-zinc-900 text-white relative'>
+        <div className='p-4 flex flex-col gap-4 w-full relative text-white'>
             <div className="w-full flex items-start justify-between">
                 <div className="text-sm cursor-pointer flex items-center gap-1" onClick={() => router.push('/')}>
                     <BackIcon />
@@ -50,16 +50,16 @@ const CreatePage = () => {
                     <MenuItems
                         transition
                         anchor="bottom end"
-                        className="w-52 origin-top-right rounded-md border border-zinc-700 bg-zinc-800 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
+                        className="w-52 origin-top-right rounded-md border border-neutral-700 bg-neutral-800 p-1 text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)] focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0"
                     >
                         <MenuItem>
-                            <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-white/10"
+                            <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-neutral-700"
                                 onClick={() => setEdit(true)}>
                                 Edit
                             </button>
                         </MenuItem>
                         <MenuItem>
-                            <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-white/10" onClick={(e: any) => handleDeleteTodo(e, detailTask)}>
+                            <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-neutral-700" onClick={(e: any) => handleDeleteTodo(e, detailTask)}>
                                 Delete Task
                             </button>
                         </MenuItem>

@@ -153,7 +153,7 @@ const DetailForm = ({ detailTask, edit, setEdit }: any) => {
                     <InputText
                         name="title"
                         onChange={handleChangeInput}
-                        className="bg-zinc-900"
+                        className="bg-neutral-900"
                         value={form?.title}
                         required />
                 </div>
@@ -163,7 +163,7 @@ const DetailForm = ({ detailTask, edit, setEdit }: any) => {
                     <InputText
                         name="description"
                         onChange={handleChangeInput}
-                        className="bg-zinc-900"
+                        className="bg-neutral-900"
                         value={form?.description} />
                 </div>
 
@@ -174,7 +174,7 @@ const DetailForm = ({ detailTask, edit, setEdit }: any) => {
 
                     <div className="flex flex-col">
                         {taskList?.map((item: any, index: any) => (
-                            <label htmlFor={`checkbox${index + 1}`} className='w-full hover:bg-zinc-800 cursor-pointer flex items-center gap-2 h-10 px-4 rounded-md relative' key={index}>
+                            <label htmlFor={`checkbox${index + 1}`} className='w-full hover:bg-neutral-800 transition cursor-pointer flex items-center gap-2 h-10 px-4 rounded-md relative' key={index}>
                                 {edit && (
                                     <input type='checkbox' id={`checkbox${index + 1}`} className='accent-zinc-700 outline-none peer'
                                         onChange={(e) => handleToggleCheckbox(e, item?.id)} checked={item?.checked} />
@@ -213,7 +213,7 @@ const DetailForm = ({ detailTask, edit, setEdit }: any) => {
                 <form onSubmit={handleAddTask}>
                     <InputText
                         name="task"
-                        className="bg-zinc-800"
+                        className="bg-neutral-900 border-neutral-600"
                         onChange={handleChangeInput}
                         value={form?.task}
                     />
@@ -232,7 +232,7 @@ const DetailForm = ({ detailTask, edit, setEdit }: any) => {
                 <form onSubmit={handleEditTask}>
                     <InputText
                         name="task"
-                        className="bg-zinc-800"
+                        className="bg-neutral-900 border-neutral-600"
                         onChange={handleChangeInput}
                         value={form?.task}
                     />

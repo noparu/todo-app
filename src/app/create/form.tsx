@@ -132,7 +132,7 @@ const CreateForm = () => {
                     <InputText
                         name="title"
                         onChange={handleChangeInput}
-                        className="bg-zinc-900"
+                        className="bg-neutral-900"
                         value={form?.title}
                         required />
                 </div>
@@ -142,7 +142,7 @@ const CreateForm = () => {
                     <InputText
                         name="description"
                         onChange={handleChangeInput}
-                        className="bg-zinc-900"
+                        className="bg-neutral-900"
                         value={form?.description} />
                 </div>
 
@@ -186,7 +186,7 @@ const CreateForm = () => {
                 <form onSubmit={handleAddTask}>
                     <InputText
                         name="task"
-                        className="bg-zinc-800"
+                        className="bg-neutral-900 border-neutral-600"
                         onChange={handleChangeInput}
                         value={form?.task} />
                 </form>
@@ -204,7 +204,7 @@ const CreateForm = () => {
                 <form onSubmit={handleEditTask}>
                     <InputText
                         name="task"
-                        className="bg-zinc-800"
+                        className="bg-neutral-900 border-neutral-600"
                         onChange={handleChangeInput}
                         value={form?.task} />
                 </form>

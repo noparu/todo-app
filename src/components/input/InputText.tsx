@@ -3,7 +3,7 @@ const InputText = ({ type = "text", placeholder, onChange, name, value, classNam
         <div>
             <input
                 type={type}
-                className={`w-full border-b outline-none ring-0 text-white ${className}`}
+                className={`w-full border-b border-neutral-600 outline-none ring-0 text-white ${className}`}
                 placeholder={placeholder}
                 name={name}
                 id={name}
