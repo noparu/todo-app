@@ -5,14 +5,15 @@ import TrashIcon from "@/components/icon/TrashIcon"
 import ModalBox from "@/components/modal/ModalBox"
 import { deleteFromLocalStorage } from "@/utils/helper"
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react"
-import moment from "moment"
+import moment, { localeData } from "moment"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import { ReactSortable } from "react-sortablejs"
 
 const Home = () => {
     const router = useRouter()
 
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState<any[]>([]);
     const [indicator, setIndicator] = useState<boolean>(false);
     const [edit, setEdit] = useState<boolean>(false)
     const [showModal, setShowModal] = useState<boolean>(false)
@@ -40,6 +41,24 @@ const Home = () => {
             setShowModal(false)
         }
     }
+
+    // const handleSortTask = () => {
+    //     const sortedTask = tasks.map((task, index) => ({
+    //         ...task,
+    //         id: index + 1
+    //     }));
+    //     setTasks(sortedTask)
+    //     // localStorage.removeItem('tasks')
+    //     // localStorage.setItem('tasks', JSON.stringify(sortedTask))
+    //     // setIndicator(!indicator)
+    // }
+
+    const handleSortTask = () => {
+        localStorage.removeItem('tasks')
+        localStorage.setItem('tasks', JSON.stringify(tasks))
+    }
+
+    console.log(tasks)
 
     return (
         <div className='p-4 flex flex-col gap-4 w-full relative text-white'>
@@ -84,7 +103,7 @@ const Home = () => {
                 </div>
 
                 <div className="w-full flex flex-col gap-3">
-                    {tasks.length ? tasks?.map((item: any, index: any) => (
+                    {!edit && tasks.length ? tasks?.map((item: any, index: any) => (
                         <div className="w-full h-[80px] flex gap-3 bg-neutral-800 hover:bg-neutral-700 group rounded-md p-3 cursor-pointer relative transition" key={index}
                             onClick={() => router.push(`/detail/${item?.slug}`)}>
                             <div className="h-full flex items-center">
@@ -108,8 +127,38 @@ const Home = () => {
                             )}
                         </div>
                     )) : (
-                        <div className="text-sm text-white/40 text-center font-light">There are no tasks created</div>
+                        !edit && (
+                            <div className="text-sm text-white/40 text-center font-light">There are no tasks created</div>
+                        )
                     )}
+                    <ReactSortable list={tasks} setList={setTasks} className="w-full flex flex-col gap-3" onChange={handleSortTask}>
+                        {edit && tasks?.map((item: any, index: any) => (
+                            <div className="w-full h-[80px] flex gap-3 bg-neutral-800 hover:bg-neutral-700 group rounded-md p-3 cursor-pointer relative transition" key={index}
+                                onClick={() => router.push(`/detail/${item?.slug}`)}
+                            >
+                                <div className="h-full flex items-center">
+                                    <div className="w-14 h-14 bg-neutral-700 rounded-md group-hover:bg-neutral-600 transition"></div>
+                                </div>
+
+
+                                <div className="flex flex-col justify-start h-full overflow-clip">
+                                    <div className="flex items-center text-xs font-light gap-4">
+                                        <p>{moment(item?.created_at).format('dddd')}</p>
+                                        <p>{moment(item?.created_at).format('LT')}</p>
+                                    </div>
+                                    <div className="text-sm">
+                                        <p>{item?.title}</p>
+                                        <p className='font-light'>{item?.description}</p>
+                                    </div>
+                                </div>
+
+                                {edit && (
+                                    <div className="absolute right-0 mx-3 z-10 text-red-500 group-hover:text-red-600 transition" onClick={(e: any) => handleDeleteTodo(e, item)}><CrossIcon /></div>
+                                )}
+                            </div>
+                        ))}
+                    </ReactSortable>
+
                 </div>
             </div>
 
