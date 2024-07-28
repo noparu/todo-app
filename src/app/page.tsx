@@ -81,10 +81,18 @@ const Home = () => {
                     >
                         <MenuItem>
                             {tasks.length ? (
-                                <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-neutral-700"
-                                    onClick={() => setEdit(true)}>
-                                    Edit
-                                </button>
+                                !edit ? (
+                                    <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-neutral-700"
+                                        onClick={() => setEdit(true)}>
+                                        Edit
+                                    </button>
+                                ) : (
+
+                                    <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-neutral-700"
+                                        onClick={() => setEdit(false)}>
+                                        Close Edit
+                                    </button>
+                                )
                             ) : (
                                 <button className="group flex w-full items-center gap-2 rounded-sm py-1.5 px-3 data-[focus]:bg-neutral-700"
                                     onClick={() => router.push('/create')}>
@@ -133,8 +141,8 @@ const Home = () => {
                     )}
                     <ReactSortable list={tasks} setList={setTasks} className="w-full flex flex-col gap-3" onChange={handleSortTask}>
                         {edit && tasks?.map((item: any, index: any) => (
-                            <div className="w-full h-[80px] flex gap-3 bg-neutral-800 hover:bg-neutral-700 group rounded-md p-3 cursor-pointer relative transition" key={index}
-                                onClick={() => router.push(`/detail/${item?.slug}`)}
+                            <div className="w-full h-[80px] flex gap-3 bg-neutral-800 hover:bg-neutral-700 group rounded-md p-3 cursor-move relative transition" key={index}
+                            // onClick={() => router.push(`/detail/${item?.slug}`)}
                             >
                                 <div className="h-full flex items-center">
                                     <div className="w-14 h-14 bg-neutral-700 rounded-md group-hover:bg-neutral-600 transition"></div>
@@ -153,7 +161,7 @@ const Home = () => {
                                 </div>
 
                                 {edit && (
-                                    <div className="absolute right-0 mx-3 z-10 text-red-500 group-hover:text-red-600 transition" onClick={(e: any) => handleDeleteTodo(e, item)}><CrossIcon /></div>
+                                    <div className="absolute right-0 mx-3 z-10 text-red-500 group-hover:text-red-600 cursor-pointer transition" onClick={(e: any) => handleDeleteTodo(e, item)}><CrossIcon /></div>
                                 )}
                             </div>
                         ))}
